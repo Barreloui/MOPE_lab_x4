@@ -180,30 +180,32 @@ sb = sum(dcup) / N
 sabs = sb / N * m
 sbs = sabs ** 0.5
 
+
+
 beta0 = (y1av1*1 + y2av2*1 + y3av3*1 + y4av4*1)/4
 beta1 = (y1av1*(-1) + y2av2*(-1) + y3av3*1 + y4av4*1)/4
 beta2 = (y1av1*(-1) + y2av2*1 + y3av3*(-1) + y4av4*1)/4
 beta3 = (y1av1*(-1) + y2av2*1 + y3av3*1 + y4av4*(-1))/4
 
-t0 = abs(beta0)/sbs
-t1 = abs(beta1)/sbs
-t2 = abs(beta2)/sbs
-t3 = abs(beta3)/sbs
+b_array = [np.linalg.det(b01)/np.linalg.det(b02),
+           np.linalg.det(b11) / np.linalg.det(b12),
+           np.linalg.det(b21) / np.linalg.det(b22),
+           np.linalg.det(b31) / np.linalg.det(b32)]
+
+
+tch_array = [abs(beta0) / sbs, abs(beta1) / sbs, abs(beta2) / sbs, abs(beta3) / sbs]
+
+
+
 
 f3 = f1*f2
 tchart  =tss(0.95, (m-1)*4)
-if (t0<tchart):
-    print("t0<tchart, b0 не значимий")
-    b0=0
-if (t1<tchart):
-    print("t1<tchart, b1 не значимий")
-    b1=0
-if (t2<tchart):
-    print("t2<tchart, b2 не значимий")
-    b2=0
-if (t3<tchart):
-    print("t3<tchart, b3 не значимий")
-    b3=0
+
+
+for i in range(len(tch_array)):
+    if  tch_array[i] < tchart:
+        b_array[i] = 0
+        print("t" + str(i) + ":", tch_array[i], " t" + str(i) + "<tchart; b" + str(i) + "=0")
 
 
 yy1 = b0 + b1*x1min + b2*x2min + b3*x3min
